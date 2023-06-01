@@ -3,29 +3,26 @@ import Index from "./pages/index";
 import Nopage from "./pages/nopage";
 import React from 'react';
 
-import { BrowserRouter,Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router,Routes, Route } from 'react-router-dom';
   
-  
+
 function App() {
-  
-  return (
-    <div>
 
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />}/>
-          <Route path="/login" element={<Login />} />
-          <Route path="/*" element={<Nopage />} />
-        </Routes>
-      </BrowserRouter>
-         
-         
+
       
-        
-         
-    </div>
-
+  return (
+    
+    <Router>
+      <Routes>
+        <Route exact path="/" element={<Index />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/*" element={<Nopage />} />
+      </Routes>
+    </Router> 
   );
+
+
+
 }
     
 
