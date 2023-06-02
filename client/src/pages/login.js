@@ -1,6 +1,10 @@
-import { React, useEffect, Component } from "react";
-import { Route} from "react-router";
-import Index from "./index";
+import { React, Component } from "react";
+import { Navigate } from "react-router-dom";
+
+
+
+const AUTH_FAILED = "Bad username or password, please retry";
+const NO_PASSWORD = "You need to enter a password";
 
 
 class Login extends Component {
@@ -13,81 +17,128 @@ class Login extends Component {
         this.state = {
             username: "",
             password: "",
-            auth:     false,
-            badAuth:  false
+            auth:     false, // if auth was successfull
+            badAuth:  false,
+            errorMsg: null 
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUnameChange = this.handleUnameChange.bind(this);
         this.handlePwrdChange = this.handlePwrdChange.bind(this);
-
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
-    handleSubmit() {
 
-        fetch("/login",{
-            method: 'POST',
-            headers: {
-                'Content-Type' : 'application/json'
-            },
-            body: JSON.stringify(this.state)
+    getPassInput() { return this.state.password; }
+    getErrMsg() { return this.state.errorMsg; }
 
-            })
-            .then(response => {
+    handleSubmit(event) {
+        
+        if (event != null) {
+            event.preventDefault();
+        }
 
-                if(response.ok) {
+        if (this.getPassInput() === "") {
+
+            this.setState({badAuth: true, errorMsg: NO_PASSWORD});
+
+        } else {
+
+
+            fetch("/login",{
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify(this.state)
+
+                })
+                .then(response => {
+
+                    if(response.ok) {
               
-                    this.setState({auth: true});
+                        this.setState({auth: true});
 
-                } else {
+                    } else {
 
-                    this.setState({badAuth: true});
-                }
+                        this.setState({badAuth: true, errorMsg: AUTH_FAILED});
+                    }
 
-            })
+            });
+
+
+
+        }
+
+
             
     }
 
     handleUnameChange(event) {
-
-        this.setState({username: event.target.value, password: this.state.password});
+       
+        event.preventDefault();
+        
+      
+        this.setState({username: event.target.value });
 
     }
 
     handlePwrdChange(event) {
-
-        this.setState({username: this.state.username, password: event.target.value})
+       
+        event.preventDefault();
+        
+        this.setState({password: event.target.value})
 
     }
 
+    handleKeyDown(event) {
+       
+        
+        if (event.key === "Enter") {
+
+            this.handleSubmit();
+
+        }
+        
+    }
    
 
     render() {
 
         if (this.state.auth) {
             
-            window.location = "/";
+            return <Navigate to="/example" replace={true} />;
 
         }
 
         return (
             <div>
-                {this.state.badAuth &&  <a color="red">Bad username or password, please retry</a>}
-                <form onSubmit={this.handleSubmit}>
+                {this.state.badAuth &&  <p color="Red">{this.getErrMsg()}</p>}
+                <div>
              
                     <label>username: </label>
-                    <input type="text" value={this.state.username} onChange={this.handleUnameChange} />
+                    <input 
+                        type="text" 
+                        value={this.state.username} 
+                        onChange={this.handleUnameChange} 
+                        onKeyDown={(e) => this.handleKeyDown(e)}
+                        />
         
-                </form>
+                </div>
 
-                <form onSubmit={this.handleSubmit}>
+                <div>
              
                     <label>password: </label>
-                    <input type="text" value={this.state.password} onChange={this.handlePwrdChange} />
+                    <input 
+                        type="text"
+                        value={this.state.password} 
+                        onChange={this.handlePwrdChange}
+                        onKeyDown={(e) => this.handleKeyDown(e)}
+                        />
  
-                </form>
+                </div>
 
-                <button onClick={this.handleSubmit}>Connect</button>
+                <button type="button" onClick={this.handleSubmit}>Connect</button>
             </div>
         );
         
