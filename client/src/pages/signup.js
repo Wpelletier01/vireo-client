@@ -49,14 +49,6 @@ class FeedbackState {
 
     }
 
-    setFnameFb(msg) { this.Fname = msg;}
-    setMnameFb(msg) { this.mname = msg;}
-    setLnameFb(msg) { this.lname = msg;}
-    setUnameFb(msg) { this.uname = msg;}
-    setBirthdayFb(msg) { this.birthday = msg;}
-    setEmailFb(msg) { this.email = msg;}
-    setPasswordMsg(msg) { this.password = msg;}
-
     haveWarnMsg() {
 
         if (this.fname != null && this.fname.type === WARNING) {
@@ -126,7 +118,7 @@ class FeedbackState {
             <div>
                 <h3>Warning:</h3>
                 {(this.fname != null && this.fname.getType() === WARNING) && 
-                <p> - {this.fname.getMsg()}</p>}
+                <p>&emsp;- {this.fname.getMsg()}</p>}
 
                 {(this.mname != null && this.mname.getType() === WARNING) && 
                 <p> - {this.mname.getMsg()}</p>}
@@ -290,6 +282,22 @@ class SignUp extends Component {
 
     }
 
+    changMsgState(atrib,msg ) {
+
+        this.setState(
+            previous => {
+
+                previous.feedback[atrib] = msg;
+
+                return {
+                    ...previous
+                }
+
+            }
+        );
+
+    }
+
 
     handleFname(event) {
 
@@ -298,22 +306,16 @@ class SignUp extends Component {
         var input = event.target.value 
 
         if (input.length > MAX_NAME_LENGTH) {
-          
-            this.setState(
-                previous => {
-
-                    previous.feedback.fname = new MsgType(WarnNameLength("first "),WARNING);
-
-                    return {
-                        ...previous
-                    }
-
-                }
-            );
+            
+            this.changMsgState("fname",new MsgType(WarnNameLength("first "),WARNING));
+            
         } else {
 
-            this.state.input.setFname(input);
-
+            if (this.state.feedback.fname != null) {
+           
+                this.changMsgState("fname",null);
+            }
+         
         }
 
     }
