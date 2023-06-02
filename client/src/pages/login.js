@@ -1,4 +1,6 @@
 import { React, useEffect, Component } from "react";
+import { Route} from "react-router";
+import Index from "./index";
 
 
 class Login extends Component {
@@ -10,7 +12,9 @@ class Login extends Component {
 
         this.state = {
             username: "",
-            password: ""
+            password: "",
+            auth:     false,
+            badAuth:  false
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -19,35 +23,29 @@ class Login extends Component {
 
     }
 
-    handleSubmit(event) {
+    handleSubmit() {
 
-        fetch("/test",{
+        fetch("/login",{
             method: 'POST',
             headers: {
                 'Content-Type' : 'application/json'
             },
             body: JSON.stringify(this.state)
 
-        })
+            })
             .then(response => {
 
                 if(response.ok) {
-                    return response.text()
+              
+                    this.setState({auth: true});
 
+                } else {
+
+                    this.setState({badAuth: true});
                 }
 
             })
-            .then(
-                data => {
-
-                    alert("you send this:" + data);
-
-                }
-            );
-
-        event.preventDefault();
-
-
+            
     }
 
     handleUnameChange(event) {
@@ -66,8 +64,15 @@ class Login extends Component {
 
     render() {
 
+        if (this.state.auth) {
+            
+            window.location = "/";
+
+        }
+
         return (
             <div>
+                {this.state.badAuth &&  <a color="red">Bad username or password, please retry</a>}
                 <form onSubmit={this.handleSubmit}>
              
                     <label>username: </label>
@@ -84,7 +89,10 @@ class Login extends Component {
 
                 <button onClick={this.handleSubmit}>Connect</button>
             </div>
-        )
+        );
+        
+        
+
     }
 
 
