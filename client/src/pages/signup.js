@@ -1,12 +1,56 @@
 import { React, Component } from "react";
+import Select from "react-select";
 
-const MAX_NAME_LENGTH = 25;// username also
+const MAX_NAME_LENGTH = 25; // username also
 const WARNING = 1;
 const ERROR = 2;
 
 function WarnNameLength(nameType) {
 
     return "Your " + nameType + "name must be contains between 1 and 25 character";
+
+}
+
+
+
+function genetateDay() {
+
+    var options = [];
+
+    for (let i=1;i <= 31; i++) {
+
+        options.push({value: i, label: i});
+    }
+
+    return options;
+
+}
+
+function generateMonth() {
+
+    var options = [];
+    for (let i=1;i <= 12; i++) {
+
+        options.push({value: i, label: i});
+    }
+
+    return options;
+
+}
+
+function generateYear() {
+
+    var options = [];
+
+    var today = new Date()
+
+    for (let i=1940; i <= today.getFullYear(); i++) {
+
+        options.push({value: i, label: i});
+
+    }
+
+    return options.reverse();
 
 }
 
@@ -121,22 +165,22 @@ class FeedbackState {
                 <p>&emsp;- {this.fname.getMsg()}</p>}
 
                 {(this.mname != null && this.mname.getType() === WARNING) && 
-                <p> - {this.mname.getMsg()}</p>}
+                <p>&emsp;- {this.mname.getMsg()}</p>}
 
                 {(this.lname != null && this.lname.getType() === WARNING) && 
-                <p>{this.lname.getMsg()}</p>}
+                <p>&emsp;- {this.lname.getMsg()}</p>}
 
                 {(this.uname != null && this.uname.getType() === WARNING) && 
-                <p>{this.Fname.getMsg()}</p>}
+                <p>&emsp;- {this.uname.getMsg()}</p>}
 
                 {(this.birthday != null && this.birthday.getType() === WARNING) && 
-                <p>{this.birthday.getMsg()}</p>}
+                <p>&emsp;- {this.birthday.getMsg()}</p>}
 
                 {(this.email != null && this.email.getType() === WARNING) && 
-                <p>{this.email.getMsg()}</p>}
+                <p>&emsp;- {this.email.getMsg()}</p>}
 
                 {(this.password != null && this.password.getType() === WARNING) && 
-                <p>{this.password.getMsg()}</p>}
+                <p>&emsp;- {this.password.getMsg()}</p>}
 
             </div>
 
@@ -167,7 +211,7 @@ class FeedbackState {
                 <p>{this.lname.getMsg()}</p>}
 
                 {(this.uname != null && this.uname.getType() === ERROR) && 
-                <p>{this.Fname.getMsg()}</p>}
+                <p>{this.uname.getMsg()}</p>}
 
                 {(this.birthday != null && this.birthday.getType() === ERROR) && 
                 <p>{this.birthday.getMsg()}</p>}
@@ -219,7 +263,9 @@ class SignUpInput {
         this.mname = "";
         this.lname = "";
         this.uname = "";
-        this.birthday = null;
+        this.day = null;
+        this.month = null;
+        this.year = null;
         this.email = "";
         this.password = "";
 
@@ -246,16 +292,16 @@ class SignUpInput {
             uname: this.uname,
             
             birthday: {
-                mm: this.birthday.getMonth(),
-                dd: this.birthday.getday(),
-                yy: this.birthday.getFullYear()
+                month: this.month,
+                day: this.day,
+                year: this.year
 
             },
 
             email: this.email,
             password: this.password
 
-        }
+        };
 
 
     }
@@ -274,15 +320,22 @@ class SignUp extends Component {
 
             input: new SignUpInput(),
             feedback: new FeedbackState(),
+            days: genetateDay(),
+            months: generateMonth(),
+            years:  generateYear(),
+            password: "",
+            npassword: "",
+            samePasswd: null,
+    
+        };
 
-        }
-
-        this.handleFname = this.handleFname.bind(this);
-
+        this.handleNameEvent = this.handleNameEvent.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.submit = this.submit.bind(this);
 
     }
 
-    changMsgState(atrib,msg ) {
+    changMsgState(atrib,msg) {
 
         this.setState(
             previous => {
@@ -298,24 +351,181 @@ class SignUp extends Component {
 
     }
 
-
-    handleFname(event) {
+    handleNameEvent(event,attrib,name) {
 
         event.preventDefault();
-        
-        var input = event.target.value 
+
+        var input = event.target.value;
 
         if (input.length > MAX_NAME_LENGTH) {
             
-            this.changMsgState("fname",new MsgType(WarnNameLength("first "),WARNING));
+            this.changMsgState(attrib,new MsgType(WarnNameLength(name),WARNING));
             
         } else {
 
-            if (this.state.feedback.fname != null) {
-           
-                this.changMsgState("fname",null);
+            if (this.state.feedback.mname != null) {
+                this.changMsgState(attrib,null);
             }
          
+        }
+
+        this.setState(previous => {
+
+            previous.input[attrib] = input;
+            
+            return {...previous};
+
+        });
+
+    }
+
+    handleInputChange(event,field) {
+
+        if (field === "npassword") {
+
+            event.preventDefault();
+
+            this.setState(previous => {
+
+                previous.npassword = event.target.value;
+                
+                return {...previous};
+             
+            });
+
+        } else if (field === "password") {
+
+            event.preventDefault();
+            this.setState(previous => {
+
+                previous.password = event.target.value;
+                
+                return {...previous};
+             
+            });
+
+        } else if (["month","day","year"].includes(field)){
+
+            
+            this.setState(previous => {
+
+                previous.input[field] = event["value"];
+            
+                return {...previous};
+         
+            });
+
+
+        } else {
+
+            event.preventDefault();
+            this.setState(previous => {
+
+                previous.input[field] = event.target.value;
+                
+                return {...previous};
+             
+            });
+
+
+        }
+
+
+    }
+
+    getFname() { return this.state.input.fname;  }
+    getMname() { return this.state.input.mname;  }
+    getLname() { return this.state.input.lname;  }
+    getUname() { return this.state.input.uname;  }
+
+
+    validateInput() {
+
+        var valid = true;
+
+        if (this.state.npassword !== this.state.password) {
+
+            this.changMsgState("password",new MsgType("Make sure to enter the same password",ERROR))
+            
+            valid =  false;
+
+        }
+
+        if(!this.state.input.email.includes("@") || !this.state.input.email.includes(".")) {
+
+            this.changMsgState("password",new MsgType("Enter a valid email",ERROR));
+            
+            valid = false;
+
+
+        }
+       
+
+        if(this.getFname().length <= 1 || this.getFname().length > MAX_NAME_LENGTH ) {
+
+            this.changMsgState("fname",new MsgType("your first name must be 1 character and no more than 25",ERROR));
+            valid = false;
+
+        }
+
+        if(this.getMname().length > MAX_NAME_LENGTH ) {
+
+            this.changMsgState("mname",new MsgType("your middle name must be 1 character and no more than 25",ERROR));
+            valid = false;
+            
+        }
+      
+        if(this.getLname().length <= 1 || this.getLname().length > MAX_NAME_LENGTH ) {
+           
+            this.changMsgState("lname",new MsgType("your last name must be 1 character and no more than 25",ERROR));
+            valid = false;
+            
+        }
+
+        if(this.getUname().length <= 1 || this.getUname().length > MAX_NAME_LENGTH ) {
+
+            this.changMsgState("uname",new MsgType("your username must be 1 character and no more than 25",ERROR));
+            valid =  false;
+            
+        }
+
+        
+        var today = new Date();
+        //TODO: validate that the date exist
+        
+        if (this.state.input.year >= today.getFullYear() - 14) {
+
+            this.changMsgState("birthday",new MsgType("you must be at least 14 teen to create an account",ERROR));
+            
+            valid = false;
+        }
+        
+        
+
+
+
+        return valid; 
+
+    }
+
+    submit() {
+
+        if(this.validateInput()) {
+
+            fetch("/signup",
+                {
+                    method: "POST",
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                    body: JSON.stringify(this.state.input.to_json())
+                }
+            )
+
+
+        } else {
+
+            console.log("monke")
         }
 
     }
@@ -324,7 +534,7 @@ class SignUp extends Component {
     render() {
 
         var msg = this.state.feedback.format();
-        
+
         return (
 
             <div>
@@ -333,60 +543,56 @@ class SignUp extends Component {
 
                 <div>
                     <label>first name:</label>
-                    <input type="text" onChange={this.handleFname}/>
+                    <input type="text" onChange={e => {this.handleNameEvent(e,"fname","first ")}}/>
                 </div>
 
                 <div>
                     <label>middle name<i>(optional)</i>:</label>
-                    <input type="text"/>
+                    <input type="text" onChange={e => {this.handleNameEvent(e,"mname","middle ")}}/>
                 </div>
 
                 <div>
                     <label>last name:</label>
-                    <input type="text"/>
+                    <input type="text" onChange={e => {this.handleNameEvent(e,"lname","last ")}} />
 
                 </div>
 
                 <div>
                     <label>username</label>
-                    <input type="text"/>
+                    <input type="text" onChange={e => {this.handleNameEvent(e,"uname","user")}} />
                 </div>
 
                 <div>
                     <label>birthday:</label>
-                    <select>
-                        <option>MM</option>
 
-                    </select>
-                    <select>
-                        <option>DD</option>
+                    <Select options={this.state.months} defaultValue={this.state.months[(new Date().getMonth())]} onChange={ e => {this.handleInputChange(e,"month")}}/>
+                    <Select options={this.state.days} defaultValue={this.state.days[(new Date().getUTCDate()) - 1]} onChange={ e => {this.handleInputChange(e,"day")}}/>
+                    <Select options={this.state.years} defaultValue={this.state.years[-1*(((new Date().getFullYear()) - 1940)-83)]} onChange={ e => {this.handleInputChange(e,"year")}}/>
 
-                    </select>
-                    <select>
-                        <option>YY</option>
-                    </select>
+                    
 
                 </div>
 
                 <div>
                     <label>email:</label>
-                    <input type="text"/>
+                    <input type="text" onChange={ e => {this.handleInputChange(e,"email")}} />
 
                 </div>
                 
                 <div>
                     <label>password:</label>
-                    <input type="text"/>
+                    <input type="text" onChange={ e => {this.handleInputChange(e,"password")}}/>
 
                 </div>
 
                 <div>
                     <label>confirm password:</label>
-                    <input type="text"/>
+                    <input type="text" onChange={ e => {this.handleInputChange(e,"npassword")}}/>
+                
 
                 </div>
 
-                <button type="button">Create</button>
+                <button type="button" onClick={this.submit} >Create</button>
 
             </div>
 
