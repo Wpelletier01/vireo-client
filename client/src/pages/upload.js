@@ -1,154 +1,165 @@
-import React, { Component } from "react";
+import React, { Component, useState,ChangeEvent} from "react";
 import { Navigate } from "react-router-dom";
 import moment from 'moment';
 
-class Upload extends Component {
 
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            file: null,
-            title: "",
-            description: "",
-            exit: false,
-            uploaded: false,
-        };
+function Upload() {
 
-        this.handleUpload = this.handleUpload.bind(this);
-        this.handleTitle = this.handleTitle.bind(this);
-        this.handleDescription = this.handleDescription.bind(this);
-        this.submit = this.submit.bind(this);
-    }
+    //TODO: implement when token expired 
+    const [file, setFile]   = useState(null);
+    const [title, setTitle]   = useState("");
+    const [description,setDescription]   = useState("");
+    const [redirect, setRedirect ]   = useState(false);
+    const [uploaded, setUploaded ]   = useState(false);
+    const [bufferId, setBufferId ]   = useState(0);
 
-    handleUpload(event) {
-       this.setState(previous => {
-
-            previous.file = event.target.files[0];
-            return { ...previous };
-            }
-        );
+    const handleUpload = (event) => {
         
-    
-    }
+        setFile(event.target.files[0]);
 
-    handleTitle(event) {
+    };
 
-        this.setState(previous => {
+    const handleTitle = (event) => {
 
-            previous.title = event.target.value;
-            return { ...previous };
-            }
-        );
-        
-    }
-
-    handleDescription(event) {
-
-        this.setState(previous => {
-
-            previous.description = event.target.value;
-            return { ...previous };
-
-            }
-        );
+        setTitle(event.target.value);
 
     }
 
-    submit() {
+    const handleDescription = (event) => {
+
+        setDescription(event.target.value);
+    }
+
+    const sendVideo = () => {
+
+
 
         fetch("/upload", {
            
             method: 'POST',
-            body: {
-                title:      this.state.title,
-                document:   this.state.description,
-                length:     this.state.file.duration,
-                date:       moment().format("YYYY-MM-DD"),
-                video:  this.state.file
-            },
-            headers: {
-                'content-type': "application/json",
-                Authorization: `Basic ${localStorage.getItem("token")}` 
             
+            body: file,
+
+            headers: {
+                'Content-Type': file.type,
+                'Content-Length': `${file.size}`
             }
+            
 
 
         }).then(response => {
 
             if (response.ok) {
 
-                this.setState(previous => {
-
-                    previous.uploaded = true;
-                    return {...previous};
-
-                });
-                
+                return response.json();
             }
 
-
-        });
-
-
+        }).then( data => {
             
 
-     
+            setBufferId(Promise.resolve(data["buffer_id"]));
+            
 
-        
+            
+        });
 
-  
     }
 
-    render() {
+    const sendInfo = () => {
 
-        if(this.state.exit) {
+        console.log("welcome")
+        //TODO: implement handling when its null
+        if (bufferId != null ) {
 
-            return <Navigate to="/signin"/>;
+            console.log("welcomedsds")
+            var body = {
+                uploader:   localStorage.getItem("user"), // TODO: tmp until token system setup
+                title:      title,
+                description:   description,
+                date:       moment().format("YYYY-MM-DD"),
+                buffer_id:  bufferId
+            };
+
+            fetch("/upload", {
+
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+
+                }
+            ).then( response => {
+
+                if (response.ok) {
+
+                    setUploaded(true)
+
+                }
+
+
+            });
 
         }
 
-        if(this.state.uploaded) {
+    }
 
-            return ( 
+    
+    
+    const submit = async () => {
+
+        await sendVideo();
+        await sendInfo();
+
+
+    } 
+
+
+    return ( 
+
+        <div>
+            {uploaded && 
                 <div>
-
-                    <p>video uploaded</p>
-
+                    <p>video uploaded succefully</p>
+                    <button onClick={() => setRedirect(true)}>Ok</button>
                 </div>
+            }
 
-            );
-
-        }
-
-        return (
-            <div>
-                <p>This is upload</p>
-                <input accept="*" type="file" onChange={this.handleUpload}/>
-
+            {redirect && 
                 <div>
-                    <div> 
-                        <label>Title:</label>
-                        <input type="text" onChange={this.handleTitle}/>
+                    <Navigate to="/channel" />
+                </div>
+            }
+            {(!redirect && !uploaded) && 
+                <div>
+                    <p>This is upload</p>
+                    <input accept="*" type="file" onChange={e => handleUpload(e)}/>
 
+                    <div>
+                        <div> 
+                            <label>Title:</label>
+                            <input type="text" onChange={handleTitle}/>
+
+                        </div>
                     </div>
                     <div> 
                         <label>Description:</label>
-                        <input type="text" onChange={this.handleDescription}/>     
+                        <input type="text" onChange={handleDescription}/>     
                     </div> 
 
-                    <button onClick={this.submit}>Upload</button> 
+                    <button onClick={submit}>Upload</button> 
                 </div>
-                
-            </div>
-        )
+        
+            }
 
-    }
-
+        </div>
+            
+    );
 
 }
 
 
-
- 
 export default Upload;
+
+
