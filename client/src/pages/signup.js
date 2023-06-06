@@ -1,5 +1,5 @@
 import { React, Component } from "react";
-import Select from "react-select";
+import { Navigate } from "react-router-dom";
 
 const MAX_NAME_LENGTH = 25; // username also
 const WARNING = 1;
@@ -13,7 +13,7 @@ function WarnNameLength(nameType) {
 
 
 
-function genetateDay() {
+function generateDay() {
 
     var options = [];
 
@@ -245,27 +245,23 @@ class FeedbackState {
                 {(err != null) && err}
             </div>
 
-
         );
-
-
     }
-
-
 }
 
 
 class SignUpInput {
 
     constructor() {
+        var today = new Date();
 
         this.fname = "";
         this.mname = "";
         this.lname = "";
         this.uname = "";
-        this.day = null;
-        this.month = null;
-        this.year = null;
+        this.day = generateDay()[today.getDate()].value;
+        this.month = generateMonth()[today.getMonth()].value;
+        this.year = generateYear()[-1*(((new Date().getFullYear()) - 1940)-83)].value;
         this.email = "";
         this.password = "";
 
@@ -281,32 +277,18 @@ class SignUpInput {
 
         return {
 
-            names: {
-
-                fname: this.fname,
-                mname: this.mname,
-                lname: this.lname 
-
-            },
-
-            uname: this.uname,
-            
-            birthday: {
-                month: this.month,
-                day: this.day,
-                year: this.year
-
-            },
-
+            fname: this.fname,
+            mname: this.mname,
+            lname: this.lname,
+            month: this.month,
+            day: this.day,
+            year: this.year,
             email: this.email,
+            username: this.uname,
             password: this.password
 
         };
-
-
     }
-
-
 }
 
 
@@ -320,17 +302,20 @@ class SignUp extends Component {
 
             input: new SignUpInput(),
             feedback: new FeedbackState(),
-            days: genetateDay(),
-            months: generateMonth(),
-            years:  generateYear(),
             password: "",
             npassword: "",
-            samePasswd: null,
+            created:    false,
+            samePasswd: null
     
         };
 
         this.handleNameEvent = this.handleNameEvent.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
+        
+        this.handleMonthChange = this.handleMonthChange.bind(this);
+        this.handleDayChange = this.handleDayChange.bind(this);
+        this.handleYearChange = this.handleYearChange.bind(this);
+
         this.submit = this.submit.bind(this);
 
     }
@@ -404,18 +389,6 @@ class SignUp extends Component {
              
             });
 
-        } else if (["month","day","year"].includes(field)){
-
-            
-            this.setState(previous => {
-
-                previous.input[field] = event["value"];
-            
-                return {...previous};
-         
-            });
-
-
         } else {
 
             event.preventDefault();
@@ -426,10 +399,38 @@ class SignUp extends Component {
                 return {...previous};
              
             });
-
-
         }
+    }
 
+
+    handleDayChange(event) {
+
+        this.setState(previous => {
+            previous.input.day = event.target.value;
+            
+            return {...previous};     
+        });
+
+    }
+
+    handleMonthChange(event) {
+
+        this.setState(previous => {
+            
+            previous.input.month = event.target.value;
+            return {...previous};
+        });
+    }
+
+    handleYearChange(event) {
+
+        this.setState(previous => {
+  
+            previous.input.year = event.target.value;
+            
+            return {...previous};
+     
+        });
 
     }
 
@@ -499,10 +500,6 @@ class SignUp extends Component {
             
             valid = false;
         }
-        
-        
-
-
 
         return valid; 
 
@@ -510,6 +507,7 @@ class SignUp extends Component {
 
     submit() {
 
+        
         if(this.validateInput()) {
 
             fetch("/signup",
@@ -520,19 +518,45 @@ class SignUp extends Component {
                     },
                     body: JSON.stringify(this.state.input.to_json())
                 }
+            ).then(resp => {
+
+                if(resp.ok){
+
+                    this.setState(previous => {
+
+                        previous.created = true;
+                        
+                        return { ...previous};
+                    });
+
+                } else {
+                    //TODO: handle error
+                    console.log("error")
+
+                }
+
+            }
+
             )
 
 
         } else {
 
-            console.log("monke")
+            //TODO: handle error
+            console.log("Error")
         }
 
     }
 
-
     render() {
 
+        
+        if(this.state.created){
+            console.log("account create");
+            return <Navigate to="/signin" replace={true}/>
+
+        }
+        
         var msg = this.state.feedback.format();
 
         return (
@@ -565,11 +589,22 @@ class SignUp extends Component {
                 <div>
                     <label>birthday:</label>
 
-                    <Select options={this.state.months} defaultValue={this.state.months[(new Date().getMonth())]} onChange={ e => {this.handleInputChange(e,"month")}}/>
-                    <Select options={this.state.days} defaultValue={this.state.days[(new Date().getUTCDate()) - 1]} onChange={ e => {this.handleInputChange(e,"day")}}/>
-                    <Select options={this.state.years} defaultValue={this.state.years[-1*(((new Date().getFullYear()) - 1940)-83)]} onChange={ e => {this.handleInputChange(e,"year")}}/>
+                    <select defaultValue="default" onChange={this.handleMonthChange}>
+                        <option value="default" disabled>Month</option>
+                        {generateMonth().map((option,index) => <option key={index} value={option.value}>{option.value}</option>)}
 
-                    
+                    </select>
+                    <select defaultValue="default" onChange={this.handleDayChange}>
+                        <option value="default" disabled>Day</option>
+                        {generateDay().map((option,index) => <option key={index} value={option.value}>{option.value}</option>)}
+                            
+                    </select>
+                    <select defaultValue="default" onChange={this.handleYearChange}>
+                        <option value="default" disabled>Year</option>
+                        {generateYear().map((option,index) => <option key={index} value={option.value}>{option.value}</option>)}
+                            
+                    </select>
+        
 
                 </div>
 

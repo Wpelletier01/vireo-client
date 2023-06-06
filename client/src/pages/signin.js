@@ -1,5 +1,5 @@
 import { React, Component } from "react";
-import { Navigate } from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 
 
@@ -7,7 +7,7 @@ const AUTH_FAILED = "Bad username or password, please retry";
 const NO_PASSWORD = "You need to enter a password";
 
 
-class Login extends Component {
+class SignIn extends Component {
 
 
     constructor(props) {
@@ -45,12 +45,18 @@ class Login extends Component {
         } else {
 
 
-            fetch("/login",{
+            var body = {
+                username: this.state.username,
+                password: this.state.password,
+                utype: "username" 
+            };
+
+            fetch("/signin",{
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json'
                 },
-                body: JSON.stringify(this.state)
+                body: JSON.stringify(body)
 
                 })
                 .then(response => {
@@ -58,20 +64,24 @@ class Login extends Component {
                     if(response.ok) {
               
                         this.setState({auth: true});
+                        
+                        return response.json()
 
                     } else {
 
                         this.setState({badAuth: true, errorMsg: AUTH_FAILED});
                     }
+                    }
+                ).then( data => {
 
-            });
+                    localStorage.setItem("token",data["token"]);
+                    localStorage.setItem("user", this.state.username);
 
+                    
+                }
 
-
+                );
         }
-
-
-            
     }
 
     handleUnameChange(event) {
@@ -107,7 +117,7 @@ class Login extends Component {
 
         if (this.state.auth) {
             
-            return <Navigate to="/example" replace={true} />;
+            return <Navigate to="/home" />;
 
         }
 
@@ -141,17 +151,7 @@ class Login extends Component {
                 <button type="button" onClick={this.handleSubmit}>Connect</button>
             </div>
         );
-        
-        
-
     }
-
-
 }
 
-
-
-
-
-
-export default Login;
+export default SignIn;

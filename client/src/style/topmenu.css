@@ -1,0 +1,46 @@
+.topbar {
+
+    display: flex;
+    height: 70px;
+    width: 100%;
+    margin: 0;
+    margin-top: 0px;
+    border: 1px solid black;
+
+}
+
+.navlink {
+
+    display: flex;
+    width: 400px;
+}
+
+.navlink a {
+
+    float: left;
+    white-space: nowrap;
+    text-decoration: none;
+    padding: 30px 10px;
+
+}
+
+.spacer {
+
+    border: 1px solid greenyellow;
+    width: 100%;
+
+}
+
+.searchbar {
+
+    padding: 20px 15px;
+    display: flex;
+
+
+}
+
+.searchbar img {
+
+    padding-right: 15px;
+
+}
