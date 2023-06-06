@@ -1,0 +1,42 @@
+
+
+.title {
+    margin: 2px 0px 0px 5px;
+
+}
+
+.channel {
+
+    margin: 2px 0px 0px 5px;
+    font-size: 12px;
+    font-style: italic;
+
+}
+
+
+
+.thumbnail {
+    
+    max-width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+.box {
+
+    text-decoration: none;
+    background-color:aqua;
+    display: block;
+    width: 25%;
+    height: 25%;
+
+
+}
+
+.box a {
+
+    display: block;
+    text-decoration: none;
+
+}
+

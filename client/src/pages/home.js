@@ -1,28 +1,29 @@
 import React, { Component } from "react";
 
 import TopBar from "../component/topbar";
- 
+import VideoBox from "../component/videobox";
 
-class Home extends Component {
+function Home() {
 
 
 
-    render() {
 
-        return ( 
+
+    return ( 
             
                  
-            <div>
-                <TopBar/>
-                <p>We are home</p>
-            </div>
+        <div>
+            <TopBar/>
+            <p>We are home</p>
+            <VideoBox />
+        </div>
 
 
 
-        )
+    );
 
 
-    }
+    
 
 
 
