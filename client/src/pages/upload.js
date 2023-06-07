@@ -35,7 +35,7 @@ function Upload() {
 
 
 
-        fetch("/upload", {
+        fetch("/upload/video", {
            
             method: 'POST',
             
@@ -57,12 +57,14 @@ function Upload() {
 
         }).then( data => {
             
-
+            
             setBufferId(Promise.resolve(data["buffer_id"]));
             
 
             
         });
+
+       
 
     }
 
@@ -72,16 +74,16 @@ function Upload() {
         //TODO: implement handling when its null
         if (bufferId != null ) {
 
-            console.log("welcomedsds")
+           
             var body = {
                 uploader:   localStorage.getItem("user"), // TODO: tmp until token system setup
                 title:      title,
-                description:   description,
+                description: description,
                 date:       moment().format("YYYY-MM-DD"),
                 buffer_id:  bufferId
             };
 
-            fetch("/upload", {
+            fetch("/upload/videoinfo", {
 
                 method: "POST",
                 headers: {
@@ -110,6 +112,8 @@ function Upload() {
     const submit = async () => {
 
         await sendVideo();
+        await console.log("buffer_id: " + bufferId)
+        setTimeout(()=> {},1000);
         await sendInfo();
 
 

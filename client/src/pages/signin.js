@@ -74,7 +74,7 @@ class SignIn extends Component {
                     }
                 ).then( data => {
 
-                    localStorage.setItem("token",data["token"]);
+                    //localStorage.setItem("token",data["token"]);
                     localStorage.setItem("user", this.state.username);
 
                     

@@ -1,24 +1,24 @@
 
 
-import React from "react";
+import React, {useState} from "react";
 import "../style/videobox.css";
 import nothumb from "../assets/thumbnail.png";
 
 
-function VideoBox() {
+function VideoBox({thumbnail,title,channel}) {
 
-
+   
 
 
     return (
-        <div>
-            <a href="/home" class="box">
-
-                <img className="thumbnail" src={nothumb} alt="video thumbnail"/>
-                <a href="/home" className="title">Title</a>
-                <a href="/channel" className="channel">Channel</a>
+        <div href="/home" className="box">
+        
+           
+            <img className="thumbnail" src={thumbnail} alt="video thumbnail"/>
+            <a href="/home" className="title">{title}</a>
+            <a href="/channel" className="channel">{channel}</a>
                 
-            </a>
+            
         </div>
 
     );

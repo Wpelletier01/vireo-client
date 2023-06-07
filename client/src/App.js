@@ -32,7 +32,7 @@ function App() {
         <Route exact path="/signin" element={<SignIn />} />
         <Route exact path="/signup" element={<SignUp />} />
         <Route exact path="/home" element={<Home />} />
-        <Route exact path="/channel" element={<Channel />} />
+        <Route exact path="/channel/*" element={<Channel />} />
         <Route exact path="/signout" element={<SignOut />} />
         <Route exact path="/upload" element={<Upload />} />
         <Route exact path="/*" element={<Nopage />} />

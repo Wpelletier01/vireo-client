@@ -9,6 +9,8 @@ class TopBar extends Component {
     render() {
         var user = localStorage.getItem("user");
 
+
+
         return (
 
            
@@ -40,7 +42,7 @@ class TopBar extends Component {
                     { (user != null) && 
 
                         <div className='navlink'>    
-                            <a href='/channel'>{"hello " + user}</a>
+                            <a href={`/channel/${user}`}>{"hello " + user}</a>
                             <a href='/signout'>sign out</a>
                         </div>
                     

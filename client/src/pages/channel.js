@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 
 import "./channel.css";
 import TopBar from "../component/topbar";
@@ -6,31 +6,27 @@ import TopBar from "../component/topbar";
 
 
 
-class Channel extends Component {
+function Channel() {
 
-    render() {
-       
+    const  [username,setUsername] = useState(window.location.pathname.replace("/channel/",""))
 
-        return (
+    return (
 
-            <div>
-                <TopBar/>
-                <p>We are at channel</p>
-                <a href="/upload">Upload</a>
+        <div>
+            <TopBar/>
+            <p>We are at the channel of {username}</p>
+            <a href="/upload">Upload</a>
 
-            </div>
-        
+        </div>
+    
 
-        );
-
-
-    }
-
-
+    );
 
 
 
 }
+
+
 
 
 
