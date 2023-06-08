@@ -55,7 +55,7 @@ function Channel() {
         <div>
             <TopBar/>
             { (username != null) && <p>{username}</p>}
-            <a href="/upload">Upload</a>
+            {(localStorage.getItem("user") === username) && <a href="/upload">Upload</a> }
             <div className="videos-list">
             { videos.map(video => (
                 <VideoBox 
