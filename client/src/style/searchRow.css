@@ -1,0 +1,53 @@
+
+
+.row {
+
+    display: flex;
+
+    border: 1px solid black;
+    width: 100%;
+    height: 150px;
+
+}
+
+
+.search-vthumbnail {
+
+
+
+}
+
+.search-cthumbnail{
+
+    border-radius: 50%;
+    border: 1px solid black;
+
+}
+
+
+.search-info {
+
+    padding-left: 10px;
+    margin-bottom: 0;
+    width: 50%;
+
+}
+
+.search-title {
+    margin-bottom: 0;
+   
+    font-size: 20px;
+
+}
+
+.search-channel {
+    margin-top: 10px;
+    font-style: italic;
+
+}
+
+.duration {
+
+    margin-right: 20px;
+
+}

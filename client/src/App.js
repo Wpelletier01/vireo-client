@@ -8,6 +8,7 @@ import SignOut from "./pages/signout";
 import About from "./pages/about";
 import Upload from "./pages/upload";
 import Video from "./pages/video";
+import Search from "./pages/search";
 
 import "./global.css";
 
@@ -37,6 +38,7 @@ function App() {
         <Route exact path="/signout" element={<SignOut />} />
         <Route exact path="/upload" element={<Upload />} />
         <Route exact path="/video/*" element={<Video />}/>
+        <Route exact path="/search/*" element={<Search />} />
         <Route exact path="/*" element={<Nopage />} />
        
       </Routes>

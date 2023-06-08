@@ -6,10 +6,11 @@ import nothumb from "../assets/thumbnail.png";
 
 const MAX_LENGTH_TITLE = 23;
 
-function VideoBox({thumbnail,title,channel,vhash}) {
+function VideoBox({thumbnail,title,channel,upload,vhash,sh_channel}) {
 
     
     const [videohash,setVideoHash] = useState(vhash);
+
 
     var ctitle = "";
 
@@ -22,13 +23,15 @@ function VideoBox({thumbnail,title,channel,vhash}) {
     }
 
     return (
-        <a href={`/video/${vhash}`} className="box">
+        <div className="box">
+            <a className="thumbnail" href={`/video/${vhash}`}>
         
-            <img className="thumbnail" src={thumbnail} alt="video thumbnail"/>
-            <p href="/home" className="title">{ctitle}</p>
-            <p href={`/channel/${channel}`} className="channel">{channel}</p>
-                    
-        </a>
+                <img src={thumbnail} alt="video thumbnail"/>
+            </a>
+            <a href={`/video/${vhash}`} className="title">{ctitle}</a>
+            { sh_channel && <a href={`/channel/${channel}`} className="channel">{channel}</a>}
+            { (upload != null) && <p className="channel">{"upload at " + upload}</p> }       
+        </div>
 
     );
 
