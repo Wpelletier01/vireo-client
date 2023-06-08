@@ -61,7 +61,7 @@ function Video() {
             { !nexist &&
                 <div>
                     <TopBar/>
-                    <video width="100%" controls>
+                    <video width="100%" controls autoPlay>
                         { (video != null) && <source src={`http://localhost:3000/video/${video}`} type="video/mp4"/>}
                     </video>
                     <p>{title}</p>
