@@ -22,13 +22,7 @@ function Home() {
             
         }); 
     
-            
-
-
-      
-    
- 
-      
+                  
         setVideos(v["videos"])
         
 
@@ -59,6 +53,7 @@ function Home() {
                     thumbnail={video["img"]} 
                     title={video["title"]} 
                     channel={video["channel"]}
+                    vhash={video["hpath"]}
                 />))
             }
 

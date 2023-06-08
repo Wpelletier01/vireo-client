@@ -7,6 +7,7 @@ import Channel from "./pages/channel";
 import SignOut from "./pages/signout";
 import About from "./pages/about";
 import Upload from "./pages/upload";
+import Video from "./pages/video";
 
 import "./global.css";
 
@@ -35,6 +36,7 @@ function App() {
         <Route exact path="/channel/*" element={<Channel />} />
         <Route exact path="/signout" element={<SignOut />} />
         <Route exact path="/upload" element={<Upload />} />
+        <Route exact path="/video/*" element={<Video />}/>
         <Route exact path="/*" element={<Nopage />} />
        
       </Routes>

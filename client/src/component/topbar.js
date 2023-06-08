@@ -17,7 +17,7 @@ class TopBar extends Component {
             <div>
                 <div className="topbar">
 
-                    <img src={logo} alt="logo"/>
+                    <img href="/home" src={logo} alt="logo"/>
                     <div className='navlink'>
                         <a href="/home">Home</a>
                         <a href="/about">About</a>
