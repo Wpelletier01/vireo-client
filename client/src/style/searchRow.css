@@ -3,44 +3,58 @@
 .row {
 
     display: flex;
-
+    flex-direction: row;
     border: 1px solid black;
     width: 100%;
     height: 150px;
 
 }
 
+.video-thumbnail {
 
-.search-vthumbnail {
-
-
+    max-height: 100%;
+    margin-right: 10px;
 
 }
 
-.search-cthumbnail{
-
+.channel-thumbnail{
+    max-height: 100%;
     border-radius: 50%;
     border: 1px solid black;
-
+    margin-right: 10px;
 }
 
 
 .search-info {
 
+    display: block;
+    text-decoration: none;
     padding-left: 10px;
     margin-bottom: 0;
-    width: 50%;
+    min-width: 0;
+    width: 100%;
+    
+}
+
+.search-cinfo {
+
+    padding-top: 10px;
 
 }
 
 .search-title {
+
+    text-decoration: none;
     margin-bottom: 0;
    
     font-size: 20px;
 
 }
 
+
+
 .search-channel {
+    text-decoration: none;
     margin-top: 10px;
     font-style: italic;
 
