@@ -48,8 +48,9 @@ class SignIn extends Component {
             var body = {
                 username: this.state.username,
                 password: this.state.password,
-                utype: "username" 
             };
+
+            
 
             fetch("/signin",{
                 method: 'POST',
