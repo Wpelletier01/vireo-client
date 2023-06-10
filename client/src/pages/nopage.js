@@ -1,7 +1,7 @@
 import React from "react";
 
  
-const Nopage = () => { 
+function NoPage() { 
 
     return (
 
@@ -12,4 +12,4 @@ const Nopage = () => {
 }
 
  
-export default Nopage;
+export default NoPage;

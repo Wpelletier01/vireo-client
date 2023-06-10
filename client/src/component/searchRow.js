@@ -17,7 +17,7 @@ function SearchRow({type,title,channel,isrc}) {
             {(type === "video" && 
                 <div className="row">
                    
-                        <img className="video-thumbnail" src={`http://localhost:3000/thumbnail/${isrc}`} alt="thumbnail or channel"/>
+                        <img className="video-thumbnail" src={`http://localhost:3000/thumbnails/${isrc}`} alt="thumbnail or channel"/>
                         <div className="search-info">
                             <a href={`/video/${isrc}`} className="search-title">{title}</a>
                             <br/>
