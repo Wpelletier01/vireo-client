@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import TopBar from "../component/topbar";
+import TopBar from "../components/topbar";
  
 
 class About extends Component {

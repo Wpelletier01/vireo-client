@@ -3,7 +3,7 @@ import React from "react";
 
 
 
-function ErrCode({code,reason}) {
+function ErrorPage({code,reason}) {
 
 
     return (
@@ -18,4 +18,4 @@ function ErrCode({code,reason}) {
 
 }
 
-export default ErrCode;
+export default ErrorPage;

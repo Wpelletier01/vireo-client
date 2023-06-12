@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from "react";
-import TopBar from "../component/topbar";
-import SearchRow from "../component/searchRow";
+import TopBar from "../components/topbar";
+import SearchRow from "../components/searchRow";
 import ErrCode from "./error";
 
 

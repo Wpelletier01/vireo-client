@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 
-import TopBar from "../component/topbar";
-import VideoBox from "../component/videobox";
+import TopBar from "../components/topbar";
+import VideoBox from "../components/videobox";
 import ErrCode from "./error";
 
 import "../style/videobox.css";

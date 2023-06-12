@@ -1,7 +1,7 @@
 import React, { Component,useEffect,useState} from "react";
 import { Navigate } from "react-router-dom";
-import TopBar from "../component/topbar";
-import VideoBox from "../component/videobox";
+import TopBar from "../components/topbar";
+import VideoBox from "../components/videobox";
 import "../style/videos-list.css";
 import "../style/videobox.css";
 import ErrCode from "./error";
@@ -25,7 +25,6 @@ function Home() {
 
             const v = await r.json();
 
-            await console.log(v);
 
             v["response"].forEach(video => {
 
@@ -69,7 +68,7 @@ function Home() {
                         thumbnail={video["img"]} 
                         title={video["title"]} 
                         channel={video["channel"]}
-                        vhash={video["hpath"]}
+                        vhash={video["thumbnail"]}
                         upload={null}
                         sh_channel={true} 
                     

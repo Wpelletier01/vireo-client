@@ -10,7 +10,7 @@ import Upload from "./pages/upload";
 import Video from "./pages/video";
 import Search from "./pages/search";
 
-import "./global.css";
+import "./style/global.css"
 
 import React from 'react';
 import { BrowserRouter as Router,Routes, Route } from 'react-router-dom';
