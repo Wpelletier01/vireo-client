@@ -1,0 +1,75 @@
+
+.pvideo {
+    max-width: 100%;
+    overflow-x: hidden;
+    background-color: var(--LIGHT_BLACK);
+
+    overflow-y: auto;
+
+    display: block;
+
+    
+    height: 100vh;
+}
+
+.pvideo p {
+
+    color: var(--WHITE);
+    margin-left: 30px;
+}
+
+.pvideo .video-player {
+    width: 100%;
+    background-color: var(--DARK_BLACK);
+
+}
+
+.pvideo video {
+    
+    padding: 1% 10% 1% 10%;
+    width: 80%;
+    height: auto;
+    
+
+}
+
+.pvideo .bottom-page {
+
+    height: 100%;
+
+}
+
+.pvideo .textbox {
+
+    border-radius: 5px;
+    border: 2px solid var(--DARK_GREY);
+    margin: 1% 1% 1% 1%;
+   
+}
+
+.pvideo .textbox .title {
+
+    font-size: 25px;
+
+}
+
+.pvideo .textbox .channel {
+    padding-top: 0;
+    font-size: 20px;
+
+}
+
+.pvideo .textbox .desc-title {
+
+    font-size: 18px;
+
+}
+
+.pvideo .textbox .desc-content {
+
+    padding-left: 2%;
+    font-style: italic;
+    font-size: 15px;
+    padding-bottom: 2%;
+    margin-bottom: 0;
+}

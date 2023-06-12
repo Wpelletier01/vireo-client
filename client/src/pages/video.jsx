@@ -66,16 +66,28 @@ function Video() {
         }
 
         return (
-            <div>
-                <TopBar/>
-                    <video id="test" width="100%" controls autoPlay>
-                        <source src={`/video/d/${video}`} type="video/mp4"/>
-                    </video>
-                    <p>{title}</p>
-                    <p>{channel}</p>
-                    <p>{description}</p>
-                <Footer/>
-            </div>
+    
+                <div className="pvideo">
+                    <TopBar/>
+                    <div className="video-player">
+                        <video id="test" width="100%" controls autoPlay>
+                            <source src={`/video/d/${video}`} type="video/mp4"/>
+                        </video>
+                    </div>
+                    <div className="bottom-page">
+                        <div class="textbox">
+                            <p className="title">{title}</p>
+                            <p className="channel">{channel}</p>
+                            <p className="desc-title">Description:</p>
+                            <p className="desc-content">{description}</p>
+
+                        </div>
+                    </div>
+                    
+                    <Footer/>
+                </div>
+         
+           
         )
 
     }

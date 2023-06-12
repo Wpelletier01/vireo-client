@@ -42,7 +42,7 @@ function TopBar() {
                 <div className="spacer"></div>
                 <div className="searchbar" hidden>
                     <img onClick={handleSearchSubmit} src={searchIcon} alt="search icon"/>
-                    <input type="text" onChange={e => setQuery(e.target.value)}/>
+                    <input type="text" onChange={e => setQuery(e.target.value)} placeholder={"search ..."}/>
 
                 </div>
                 <div className="spacer"></div>

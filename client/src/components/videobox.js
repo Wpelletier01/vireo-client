@@ -23,7 +23,7 @@ function VideoBox({thumbnail,title,channel,upload,vhash,sh_channel}) {
     }
 
     return (
-        <div className="box">
+        <div className="vbox">
             <a className="thumbnail" href={`/video/${vhash}`}>
         
                 <img src={thumbnail} alt="video thumbnail"/>

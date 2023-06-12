@@ -2,11 +2,13 @@
 
     display: flex;
     height: 70px;
-    width: 100%;
     margin: 0;
     margin-top: 0px;
-    border: 1px solid black;
-
+    max-width: 100%;
+    background-color: var(--LIGHT_BLACK);
+    border: 2px solid var(--PURPLE);
+    border-radius: 10px;
+    border-top: 0;
 }
 
 .navlink {
@@ -17,6 +19,8 @@
 
 .navlink a {
 
+    color: var(--WHITE);
+    border: 1px solid var(--DARK_GREY);
     float: left;
     white-space: nowrap;
     text-decoration: none;
@@ -24,15 +28,22 @@
 
 }
 
+.navlink a:hover {
+
+    background-color: var(--DARK_GREY);
+
+
+}
+
 .spacer {
 
-    border: 1px solid greenyellow;
     width: 100%;
 
 }
 
 .searchbar {
 
+    background-color: var(--DARK_GREY);
     padding: 20px 15px;
     display: flex;
 
