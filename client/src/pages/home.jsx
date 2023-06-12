@@ -2,15 +2,17 @@ import React, { Component,useEffect,useState} from "react";
 import { Navigate } from "react-router-dom";
 import TopBar from "../components/topbar";
 import VideoBox from "../components/videobox";
+
+import ErrCode from "./error";
+import Footer from "../components/footer";
+
 import "../style/videos-list.css";
 import "../style/videobox.css";
-import ErrCode from "./error";
 
 
 function Home() {
 
- 
-    const [redirect,setRedirect] = useState(null);
+    const [errorCode, setErrorCode] = useState(0);
     const [videos,setVideos] = useState([]);
     
     const init = async () => {
@@ -19,7 +21,7 @@ function Home() {
 
         if (!r.ok) {
 
-            setRedirect(r.status)
+            setErrorCode(r.status)
             
         } else {
 
@@ -41,7 +43,6 @@ function Home() {
 
     }
 
-    
 
     useEffect(() => {
         
@@ -58,34 +59,31 @@ function Home() {
             
              
         <div>
-            {redirect == null &&
-            <div>
-                <TopBar/>
-                <p>We are home</p>
-                <div className="videos-list">
-                    { videos.map(video => (
-                    <VideoBox 
-                        thumbnail={video["img"]} 
-                        title={video["title"]} 
-                        channel={video["channel"]}
-                        vhash={video["thumbnail"]}
-                        upload={null}
-                        sh_channel={true} 
-                    
-                    />))
-                    }
-                </div>
-            </div>
+            {(errorCode === 0) 
+
+                ?   <div>
+                        <TopBar/>
+                        <div className="videos-list">
+
+                        
+                            { videos.map(video => (
+                            <VideoBox 
+                                thumbnail={video["img"]} 
+                                title={video["title"]} 
+                                channel={video["channel"]}
+                                vhash={video["thumbnail"]}
+                                upload={null}
+                                sh_channel={true} 
+                            
+                            />))
+                        }
+                        </div>
+                        <Footer/>
+                    </div>
               
+                :   <ErrCode code={errorCode}/>
             }
 
-            {
-                redirect != null && 
-                <ErrCode 
-                    code={redirect}
-                />
-            
-            }
 
         </div>
 
