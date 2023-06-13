@@ -39,7 +39,7 @@
 .vbox .title {
     
     padding: 2% 5% 1% 10%;
-
+    white-space: nowrap;
     min-height: 0;
     text-decoration: none;
     color: var(--WHITE);
