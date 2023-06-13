@@ -1,5 +1,4 @@
-import React, { Component,useEffect,useState} from "react";
-import { Navigate } from "react-router-dom";
+import React, {useEffect,useState} from "react";
 import TopBar from "../components/topbar";
 import VideoBox from "../components/videobox";
 

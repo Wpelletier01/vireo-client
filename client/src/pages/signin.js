@@ -1,158 +1,115 @@
-import { React, Component } from "react";
-import {Navigate} from "react-router-dom";
+import React,{useState} from "react";
+import {useNavigate} from "react-router-dom";
+import ErrorPage from "./error";
 
+import "../style/login.css";
 
 
 const AUTH_FAILED = "Bad username or password, please retry";
 const NO_PASSWORD = "You need to enter a password";
 
-
-class SignIn extends Component {
-
-
-    constructor(props) {
-
-        super(props);
-
-        this.state = {
-            username: "",
-            password: "",
-            auth:     false, // if auth was successfull
-            badAuth:  false,
-            errorMsg: null 
-        };
-
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleUnameChange = this.handleUnameChange.bind(this);
-        this.handlePwrdChange = this.handlePwrdChange.bind(this);
-        this.handleKeyDown = this.handleKeyDown.bind(this);
-    }
+//TODO: implement forgot password
 
 
-    getPassInput() { return this.state.password; }
-    getErrMsg() { return this.state.errorMsg; }
-
-    handleSubmit(event) {
-        
-        if (event != null) {
-            event.preventDefault();
-        }
-
-        if (this.getPassInput() === "") {
-
-            this.setState({badAuth: true, errorMsg: NO_PASSWORD});
-
-        } else {
+function SignIn() {
 
 
+    const navigate = useNavigate();
+
+    const [errorCode,setErrorCode] = useState(0);
+    const [username,setUsername] = useState('');
+    const [password,setPassword] = useState('');
+    const [isConnect, setIsConnect] = useState(false);
+    const [errMsg,setErrMsg] = useState('');
+
+    const submit = async (event) => {
+
+        event.preventDefault();
+
+        if (username !== '' && password !== '') {
             var body = {
-                username: this.state.username,
-                password: this.state.password,
+                "username": username,
+                "password": password
             };
 
-            
-
-            fetch("/signin",{
+            const response = await fetch("/signin",{
                 method: 'POST',
                 headers: {
-                    'Content-Type' : 'application/json'
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify(body)
+            });
 
-                })
-                .then(response => {
+            if(!response.ok) {
+                console.log(await response.text());
 
-                    if(response.ok) {
-              
-                        this.setState({auth: true});
-                        
-                        return response.json()
+                if (response.status === 403) {
 
-                    } else {
+                    setErrMsg("Too many attemp, please try later");
 
-                        this.setState({badAuth: true, errorMsg: AUTH_FAILED});
-                    }
-                    }
-                ).then( data => {
+                } else if (response.status === 401){
 
-                    //localStorage.setItem("token",data["token"]);
-                    localStorage.setItem("user", this.state.username);
+                    setErrMsg("wrong username or password");
 
-                    
+                } else {
+
+                    setErrorCode(response.status);
+
                 }
 
-                );
-        }
-    }
 
-    handleUnameChange(event) {
-       
-        event.preventDefault();
-        
-      
-        this.setState({username: event.target.value });
+            } else {
 
-    }
+                const data = await response.json();
+                localStorage.setItem('token',data['response']['vtoken']);
+                localStorage.setItem('user',username);
+                setIsConnect(true)
 
-    handlePwrdChange(event) {
-       
-        event.preventDefault();
-        
-        this.setState({password: event.target.value})
+            }
 
-    }
-
-    handleKeyDown(event) {
-       
-        
-        if (event.key === "Enter") {
-
-            this.handleSubmit();
-
-        }
-        
-    }
-   
-
-    render() {
-
-        if (this.state.auth) {
-            
-            return <Navigate to="/home" />;
-
+    
+        } else if (username === '' && password !== '') {
+            setErrMsg("Username require");
+        } else if (username !== '' && password === '') {
+            setErrMsg('password require');
         }
 
-        return (
-            <div>
-                {this.state.badAuth &&  <p color="Red">{this.getErrMsg()}</p>}
-                <div>
-             
-                    <label>username: </label>
-                    <input 
-                        type="text" 
-                        value={this.state.username} 
-                        onChange={this.handleUnameChange} 
-                        onKeyDown={(e) => this.handleKeyDown(e)}
-                        />
-        
-                </div>
 
-                <div>
-             
-                    <label>password: </label>
-                    <input 
-                        type="text"
-                        value={this.state.password} 
-                        onChange={this.handlePwrdChange}
-                        onKeyDown={(e) => this.handleKeyDown(e)}
-                        />
+    }
+
+    if (isConnect) {
+
+        navigate("/home");
+        
+    }
+
+    if (errorCode !== 0) {
+
+        return <ErrorPage code={errorCode}/>;
+    }
+
+    return (
+        <div className="main">
+            <p className="sign" align="center">Sign in</p>
+            <form className="form1">
+                {(errMsg !== '') && <p className="error-msg">{errMsg}</p>}
+                <input className="un " type="text" align="center" placeholder="Username" onChange={e => setUsername(e.target.value)}/>
+                <input className="pass" type="password" align="center" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
+                <button type="submit" className="submit" align="center" onClick={submit}>Sign in</button>
+                <p className="forgot" align="center"><a href="/">Forgot Password?</a></p>
+            </form>
  
-                </div>
+        </div>
+    );
 
-                <button type="button" onClick={this.handleSubmit}>Connect</button>
-            </div>
-        );
-    }
+
+
 }
+
+
+
+
+
+
 
 export default SignIn;

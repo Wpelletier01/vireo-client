@@ -10,11 +10,12 @@
     border: 1px solid var(--GREEN);
     border-radius: 5px;
 
-    max-height: 250px;
-    width:  24.5%;
+    height: auto;
+    height: 250px;
+    width:  24%;
 
 
-    gap: 10px;
+
     background-color: var(--LIGHT_BLACK);
 
 }
@@ -34,22 +35,22 @@
 }
 .vbox .title {
     
-    padding: 4% 5% 2% 10%;
+    padding: 4% 5% 1% 10%;
 
     min-height: 0;
     text-decoration: none;
-    color: inherit;
+    color: var(--WHITE);
 }
 
 .vbox .channel {
 
-    padding: 1px 5% 2% 5%;
+    padding: .5% 5% 2% 10%;
    
     font-size: 12px;
     font-style: italic;
     min-height: 0;
     text-decoration: none;
-    color: inherit;
+    color: var(--WHITE);
 
 }
 

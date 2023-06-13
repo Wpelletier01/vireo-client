@@ -70,7 +70,7 @@ function Channel() {
             { (errStats == null) &&
                 <div>
                     <TopBar/>
-                    { (username != null) && <p>{username}</p>}
+                    { (username != null) && <p className="channel-name">{username}</p>}
                     {(localStorage.getItem("user") === username) && <a href="/upload">Upload</a> }
                     <div className="videos-list">
                     { videos.map(video => (

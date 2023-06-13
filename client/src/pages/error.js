@@ -9,7 +9,7 @@ function ErrorPage({code,reason}) {
     return (
 
         <div>
-            <h1>{"Error code: " + code }</h1>
+            <h1 class='error-code'>{"Error code: " + code }</h1>
             <h2>{reason}</h2>
         </div>
 
