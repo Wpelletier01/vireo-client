@@ -1,0 +1,124 @@
+:root {
+    
+    --fname_row: var(--LIGHT_GREY);
+    --mname_row: var(--LIGHT_GREY);
+    --lname_row: var(--LIGHT_GREY);
+    --uname_row: var(--LIGHT_GREY);
+    --email_row: var(--LIGHT_GREY);
+    --npassword_row: var(--LIGHT_GREY);
+    --rpassword_row: var(--LIGHT_GREY);
+    --birthday_row: var(--LIGHT_GREY);
+}
+
+.main-signup {
+
+    text-align: center;
+  
+    
+}
+
+.main-signup p {
+
+
+    color: var(--WHITE);
+
+}
+
+.main-signup form {
+
+
+    display: inline;
+    background-color: var(--DARK_BLACK);
+
+}
+
+.main-signup button {
+    margin-top: 10px;
+    border-radius: 10px;
+    width: 175px;
+    height: 50px;
+
+    font-size: larger;
+    color: var(--WHITE);
+
+    background-color: var(--PURPLE);
+
+}
+
+
+.signup-input {
+
+    text-align: center;
+    font-size: medium;
+
+    margin-bottom: 10px;
+    width: 450px;
+    height: 50px;
+    border-radius: 20px;
+    
+}
+
+/* ROW INPUT BORDER COLOR*/
+
+.row-fname {
+  
+
+}
+
+.row-mname .signup-input{
+    
+    border: 2px solid var(--mname_row);    
+}
+
+.row-lname .signup-input{
+    
+    border: 2px solid var(--lname_row);    
+}
+
+.row-uname .signup-input{
+    
+    border: 2px solid var(--uname_row);    
+}
+
+.row-email .signup-input{
+    
+    border: 2px solid var(--email_row);    
+}
+
+.row-npassword .signup-input{
+    
+    border: 2px solid var(--npassword_row);    
+}
+
+.row-rpassword .signup-input{
+    
+    border: 2px solid var(--rpassword_row);    
+}
+
+.row-birthday .signup-input{
+    
+    border: 2px solid var(--birthday_row);    
+}
+
+/*  */
+
+.sel-div select {
+
+    width: 150px;
+    height: 50px;
+
+}
+
+
+.main-signup form .error-row {
+    margin-bottom: 0;
+    padding-top: 10px;
+    color: red;
+
+}
+.main-signup .submit-err {
+
+    color: red;
+    font-size: large;
+    white-space: pre-line;
+}

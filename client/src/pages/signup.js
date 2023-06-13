@@ -1,15 +1,20 @@
-import { React, Component } from "react";
+import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 
-const MAX_NAME_LENGTH = 25; // username also
+
+import "../style/signup.css";
+
+
+const MAX_NAME_LENGTH = 25; 
+const MAX_EMAIL_LENGTH = 100;
+const MAX_PASSWORD_LENGTH = 50;
+
 const WARNING = 1;
 const ERROR = 2;
+const ERROR_BORDER_COLOR = "red";
+const NORMAL_BORDER_COLOR = "#94a1b2";
 
-function WarnNameLength(nameType) {
-
-    return "Your " + nameType + "name must be contains between 1 and 25 character";
-
-}
+const ERROR_NAME_LENGTH = "Cant have more than 25 characters";
 
 
 
@@ -55,588 +60,427 @@ function generateYear() {
 }
 
 
-class MsgType {
 
-    constructor(msg,type) {
+function handleInputChange(nvalue,color) {
 
-        this.msg = msg;
-        this.type = type;
+    var content = "";
+    var err = "";
+    var color = "";
 
-    }
-
-    getType() { return this.type;   }
-    getMsg()  { return this.msg;    }
-
-
-}
-
-
-class FeedbackState {
-
-    constructor() {
-
-        // first name
-        this.Fname = null;
-        // middle name
-        this.mname = null;
-        // last name
-        this.lname = null;
-        // username
-        this.uname = null;
-        // birthday
-        this.birthday = null;
-        // email  
-        this.email = null;
-        // password complexity
-        this.password = null;
+    if (nvalue.length <= MAX_NAME_LENGTH) {
         
+        color = NORMAL_BORDER_COLOR;
+        content = nvalue;
 
+    } else {
+
+        err = ERROR_NAME_LENGTH;
+        color = ERROR_BORDER_COLOR;
     }
 
-    haveWarnMsg() {
-
-        if (this.fname != null && this.fname.type === WARNING) {
-            return true;
-        } 
-        if (this.mname != null && this.mname.type === WARNING) {
-            return true;
-        } 
-        if (this.lname != null && this.lname.type === WARNING) {
-            return true;
-        } 
-        if (this.uname != null && this.uname.type === WARNING) {
-            return true;
-        } 
-        if (this.birthday != null && this.birthday.type === WARNING) {
-            return true;
-        } 
-        if ( this.email != null && this.email.type === WARNING) {
-            return true;
-        } 
-        if (this.password != null && this.password.type === WARNING) {
-            return true;
-        } 
-
-        return false;
-
-    }
-
-    haveErrorMsg() {
-
-        if (this.fname != null && this.fname.type === ERROR) {
-            return true;
-        } 
-        if (this.mname != null && this.mname.type === ERROR) {
-            return true;
-        } 
-        if (this.lname != null && this.lname.type === ERROR) {
-            return true;
-        } 
-        if (this.uname != null && this.uname.type === ERROR) {
-            return true;
-        } 
-        if (this.birthday != null && this.birthday.type === ERROR) {
-            return true;
-        } 
-        if ( this.email != null && this.email.type === ERROR) {
-            return true;
-        } 
-        if (this.password != null && this.password.type === ERROR) {
-            return true;
-        } 
-
-        return false;
-
-    }
+    return {
+        "content": content,
+        "errMsg":  err,
+        "color":   color
+    };
 
 
-    formatWarning() {
-
-        if (!this.haveWarnMsg()) {
-
-            return null;
-
-        }
-
-        return (
-            <div>
-                <h3>Warning:</h3>
-                {(this.fname != null && this.fname.getType() === WARNING) && 
-                <p>&emsp;- {this.fname.getMsg()}</p>}
-
-                {(this.mname != null && this.mname.getType() === WARNING) && 
-                <p>&emsp;- {this.mname.getMsg()}</p>}
-
-                {(this.lname != null && this.lname.getType() === WARNING) && 
-                <p>&emsp;- {this.lname.getMsg()}</p>}
-
-                {(this.uname != null && this.uname.getType() === WARNING) && 
-                <p>&emsp;- {this.uname.getMsg()}</p>}
-
-                {(this.birthday != null && this.birthday.getType() === WARNING) && 
-                <p>&emsp;- {this.birthday.getMsg()}</p>}
-
-                {(this.email != null && this.email.getType() === WARNING) && 
-                <p>&emsp;- {this.email.getMsg()}</p>}
-
-                {(this.password != null && this.password.getType() === WARNING) && 
-                <p>&emsp;- {this.password.getMsg()}</p>}
-
-            </div>
-
-        );
-
-    }
-
-    
-
-    formatErr() {
-
-        if (!this.haveErrorMsg()) {
-            
-            return null;
-
-        }
-
-        return (
-            <div>
-                <h3>Error:</h3>
-                {(this.fname != null && this.fname.getType() === ERROR) && 
-                <p>{this.fname.getMsg()}</p>}
-
-                {(this.mname != null && this.mname.getType() === ERROR) && 
-                <p>{this.mname.getMsg()}</p>}
-
-                {(this.lname != null && this.lname.getType() === ERROR) && 
-                <p>{this.lname.getMsg()}</p>}
-
-                {(this.uname != null && this.uname.getType() === ERROR) && 
-                <p>{this.uname.getMsg()}</p>}
-
-                {(this.birthday != null && this.birthday.getType() === ERROR) && 
-                <p>{this.birthday.getMsg()}</p>}
-
-                {(this.email != null && this.email.getType() === ERROR) && 
-                <p>{this.email.getMsg()}</p>}
-
-                {(this.password != null && this.password.getType() === ERROR) && 
-                <p>{this.password.getMsg()}</p>}
-
-            </div>
-
-        );
-
-    }
-
-    format() {
-
-        var err = this.formatErr();
-        var warn = this.formatWarning();
-
- 
-        if (err == null && warn == null) {
-            return null;
-        }
-    
-        return (
-
-            <div>
-                {(warn != null) && warn}
-                {(err != null) && err}
-            </div>
-
-        );
-    }
 }
 
 
-class SignUpInput {
-
-    constructor() {
-        var today = new Date();
-
-        this.fname = "";
-        this.mname = "";
-        this.lname = "";
-        this.uname = "";
-        this.day = generateDay()[today.getDate()].value;
-        this.month = generateMonth()[today.getMonth()].value;
-        this.year = generateYear()[-1*(((new Date().getFullYear()) - 1940)-83)].value;
-        this.email = "";
-        this.password = "";
-
-    }
-
-    setFname(input) {
-
-        this.fname = input;
-
-    }
-
-    to_json() {
-
-        return {
-
-            fname: this.fname,
-            mname: this.mname,
-            lname: this.lname,
-            month: this.month,
-            day: this.day,
-            year: this.year,
-            email: this.email,
-            username: this.uname,
-            password: this.password
-
-        };
-    }
-}
 
 
-class SignUp extends Component {
+function SignUp() {
 
-    constructor(props) {
 
-        super(props);
+    const [fname,setFname] = useState("");
+    const [errFname,setErrFname] = useState("");
+    const [fnameBorderClr,setFnameBorderClr] = useState(NORMAL_BORDER_COLOR);
 
-        this.state = {
+    const [mname,setMname] = useState("");
+    const [errMname,setErrMname] = useState("");
+    const [mnameBorderClr,setMnameBorderClr] = useState(NORMAL_BORDER_COLOR);
 
-            input: new SignUpInput(),
-            feedback: new FeedbackState(),
-            password: "",
-            npassword: "",
-            created:    false,
-            samePasswd: null
-    
-        };
+    const [lname,setLname] = useState("");
+    const [errLname,setErrLname] = useState("");
+    const [lnameBorderClr,setLnameBorderClr] = useState(NORMAL_BORDER_COLOR);
 
-        this.handleNameEvent = this.handleNameEvent.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
-        
-        this.handleMonthChange = this.handleMonthChange.bind(this);
-        this.handleDayChange = this.handleDayChange.bind(this);
-        this.handleYearChange = this.handleYearChange.bind(this);
+    const [uname,setUname] = useState("");
+    const [errUname,setErrUname] = useState("");
+    const [unameBorderClr,setUnameBorderClr] = useState(NORMAL_BORDER_COLOR);
 
-        this.submit = this.submit.bind(this);
+    const [email,setEmail] = useState("");
+    const [errEmail,setErrEmail] = useState("");
+    const [emailBorderClr,setEmailBorderClr] = useState(NORMAL_BORDER_COLOR);
 
-    }
 
-    changMsgState(atrib,msg) {
+    const [errBirthday,setErrBirthday] = useState("");
 
-        this.setState(
-            previous => {
+    const [password,setPassword] = useState("");
+    const [errPassword,setErrPassword] = useState("");
+    const [passwordBorderClr,setPasswordBorderClr] = useState(NORMAL_BORDER_COLOR);
 
-                previous.feedback[atrib] = msg;
 
-                return {
-                    ...previous
-                }
+    const [rpassword,setRpassword] = useState("");
+    const [errRpassword,setErrRpassword] = useState("");
+    const [rpasswordBorderClr,setRpasswdBorderClr] = useState(NORMAL_BORDER_COLOR);
 
-            }
-        );
+    const [month,setMonth] = useState("");
+    const [year,setYear] = useState("");
+    const [day,setDay] = useState("");
 
-    }
+    const [submitErr, setSubmitErr] = useState("");
 
-    handleNameEvent(event,attrib,name) {
+    const handleFname = (event) => {
 
         event.preventDefault();
 
-        var input = event.target.value;
+        var response = handleInputChange(event.target.value,fnameBorderClr);
 
-        if (input.length > MAX_NAME_LENGTH) {
-            
-            this.changMsgState(attrib,new MsgType(WarnNameLength(name),WARNING));
-            
+        setFname(response.content);
+        setErrFname(response.errMsg);
+        setFnameBorderClr(response.color);
+
+    }
+
+    const handleMname = (event) => {
+        event.preventDefault();
+
+        var response = handleInputChange(event.target.value,mnameBorderClr);
+
+        setMname(response.content);
+        setErrMname(response.errMsg);
+        setMnameBorderClr(response.color);
+
+    }
+
+    const handleLname = (event) => {
+        event.preventDefault();
+
+        var response = handleInputChange(event.target.value,lnameBorderClr);
+
+        setLname(response.content);
+        setErrLname(response.errMsg);
+        setLnameBorderClr(response.color);
+
+    }
+
+    const handleUname = (event) => {
+        event.preventDefault();
+
+        var response = handleInputChange(event.target.value,unameBorderClr);
+
+        setUname(response.content);
+        setErrUname(response.errMsg);
+        setUnameBorderClr(response.color);
+
+    }
+
+    const handleEmail = (event) => {
+        event.preventDefault();
+
+        if (event.target.value.length <= MAX_EMAIL_LENGTH) {
+
+            setErrEmail("");
+            setEmailBorderClr(NORMAL_BORDER_COLOR);
+            setEmail(event.target.value);
+
+
         } else {
+            setEmailBorderClr(ERROR_BORDER_COLOR);
+            setErrEmail("sorry your email is too long");
 
-            if (this.state.feedback.mname != null) {
-                this.changMsgState(attrib,null);
-            }
-         
         }
-
-        this.setState(previous => {
-
-            previous.input[attrib] = input;
-            
-            return {...previous};
-
-        });
 
     }
 
-    handleInputChange(event,field) {
+    const handleNpasswd = (event) => {
+        event.preventDefault();
 
-        if (field === "npassword") {
+        if (event.target.value.length <= MAX_PASSWORD_LENGTH ) {
 
-            event.preventDefault();
+            setErrPassword("");
+            setPasswordBorderClr(NORMAL_BORDER_COLOR);
+            setPassword(event.target.value);
 
-            this.setState(previous => {
-
-                previous.npassword = event.target.value;
-                
-                return {...previous};
-             
-            });
-
-        } else if (field === "password") {
-
-            event.preventDefault();
-            this.setState(previous => {
-
-                previous.password = event.target.value;
-                
-                return {...previous};
-             
-            });
 
         } else {
+            setPasswordBorderClr(ERROR_BORDER_COLOR);
+            setErrPassword("sorry your password is too long");
 
-            event.preventDefault();
-            this.setState(previous => {
-
-                previous.input[field] = event.target.value;
-                
-                return {...previous};
-             
-            });
         }
-    }
 
-
-    handleDayChange(event) {
-
-        this.setState(previous => {
-            previous.input.day = event.target.value;
-            
-            return {...previous};     
-        });
 
     }
+    const handleRpasswd = (event) => {
+        event.preventDefault();
 
-    handleMonthChange(event) {
+        setTimeout(function() {
 
-        this.setState(previous => {
-            
-            previous.input.month = event.target.value;
-            return {...previous};
-        });
-    }
-
-    handleYearChange(event) {
-
-        this.setState(previous => {
-  
-            previous.input.year = event.target.value;
-            
-            return {...previous};
-     
-        });
-
-    }
-
-    getFname() { return this.state.input.fname;  }
-    getMname() { return this.state.input.mname;  }
-    getLname() { return this.state.input.lname;  }
-    getUname() { return this.state.input.uname;  }
-
-
-    validateInput() {
-
-        var valid = true;
-
-        if (this.state.npassword !== this.state.password) {
-
-            this.changMsgState("password",new MsgType("Make sure to enter the same password",ERROR))
-            
-            valid =  false;
-
-        }
-
-        if(!this.state.input.email.includes("@") || !this.state.input.email.includes(".")) {
-
-            this.changMsgState("password",new MsgType("Enter a valid email",ERROR));
-            
-            valid = false;
-
-
-        }
-       
-
-        if(this.getFname().length <= 1 || this.getFname().length > MAX_NAME_LENGTH ) {
-
-            this.changMsgState("fname",new MsgType("your first name must be 1 character and no more than 25",ERROR));
-            valid = false;
-
-        }
-
-        if(this.getMname().length > MAX_NAME_LENGTH ) {
-
-            this.changMsgState("mname",new MsgType("your middle name must be 1 character and no more than 25",ERROR));
-            valid = false;
-            
-        }
-      
-        if(this.getLname().length <= 1 || this.getLname().length > MAX_NAME_LENGTH ) {
-           
-            this.changMsgState("lname",new MsgType("your last name must be 1 character and no more than 25",ERROR));
-            valid = false;
-            
-        }
-
-        if(this.getUname().length <= 1 || this.getUname().length > MAX_NAME_LENGTH ) {
-
-            this.changMsgState("uname",new MsgType("your username must be 1 character and no more than 25",ERROR));
-            valid =  false;
-            
-        }
-
-        
-        var today = new Date();
-        //TODO: validate that the date exist
-        
-        if (this.state.input.year >= today.getFullYear() - 14) {
-
-            this.changMsgState("birthday",new MsgType("you must be at least 14 teen to create an account",ERROR));
-            
-            valid = false;
-        }
-
-        return valid; 
-
-    }
-
-    submit() {
-
-        
-        if(this.validateInput()) {
-
-            fetch("/signup",
-                {
-                    method: "POST",
-                    headers: {
-                        'Content-Type' : 'application/json'
-                    },
-                    body: JSON.stringify(this.state.input.to_json())
-                }
-            ).then(resp => {
-
-                if(resp.ok){
-
-                    this.setState(previous => {
-
-                        previous.created = true;
-                        
-                        return { ...previous};
-                    });
-
-                } else {
-                    //TODO: handle error
-                    console.log("error")
-
-                }
-
+            if (event.target.value === password) {
+                setErrRpassword("");
+                setRpasswdBorderClr(NORMAL_BORDER_COLOR);
+                setRpassword(event.target.value);
+    
+            } else {
+    
+                setErrRpassword("Password Different");
+                setRpasswdBorderClr(ERROR_BORDER_COLOR);
+    
             }
 
-            )
 
+        },500);
 
-        } else {
-
-            //TODO: handle error
-            console.log("Error")
-        }
 
     }
 
-    render() {
 
-        
-        if(this.state.created){
-            console.log("account create");
-            return <Navigate to="/signin" replace={true}/>
+    const haveErrMsg = () => {
 
+        if (errFname !== "") {
+            return true;
+        }
+
+        if (errMname !== "") {
+            return true;
+        }
+        // middle name is optional
+
+        if (errLname !== "") {
+            return true;
+        }
+
+        if (errUname !== "") {
+            return true; 
+        }
+
+        if (errEmail !== "") {
+            return true;
+        }
+
+        if (errPassword !== "" ) {
+            return true;
+            
+        }
+
+        if (errRpassword !== "") {
+            return true;
+        }
+
+        return false;
+
+
+    }
+
+
+    const checkEmptyField = () => {
+
+        var msg = "";
+
+        if (fname === "" ) {
+            msg = `${msg}First name is require\n`;
+        }
+
+        if (lname === "") {
+            msg = `${msg}Last name is require\n`;
+        } 
+
+        if (uname === "") {
+            msg = `${msg}Username is require\n`;
+        } 
+
+        if (email === "") {
+            msg = `${msg}Email is require\n`;
+        }
+
+        if (password === "") {
+            msg = `${msg}Password is require\n`;
+        }
+
+        if (rpassword === "") {
+            msg = `${msg}You need to reenter your password\n`;
+        }
+
+        return msg
+
+    }
+
+    const validateNameValue = () => {
+
+        var msg = "";
+        var re = /[/*()\\:{}|<>]/i;
+
+
+        if (re.test(fname)) {
+            msg = `${msg}First name contain invalid character\n`;
+        }
+
+        if (mname !== "") {
+
+            if (re.test(mname)) {
+                msg = `${msg}Middle name contain invalid character\n`;
+            }
+    
+        }
+
+        if (re.test(lname)) {
+            msg = `${msg}Last name contain invalid character\n`;
         }
         
-        var msg = this.state.feedback.format();
+        if (re.test(uname)) {
+            msg = `${msg}Username contain invalid character\n`;
+        }
 
-        return (
+        if (msg !== "") {
+            msg = `${msg}Name cant contain those character: /, *, (, ), \\, :, {, }, |, <, >\n`;
 
-            <div>
+        }
 
-                {(msg != null) && msg }
+        return msg;
+        
 
-                <div>
-                    <label>first name:</label>
-                    <input type="text" onChange={e => {this.handleNameEvent(e,"fname","first ")}}/>
+    }
+
+
+    const submit = (event) => {
+
+        event.preventDefault();
+
+        if (haveErrMsg()) {
+            setSubmitErr("correct the error first");
+            return;
+        } 
+            
+        setSubmitErr("");
+
+        var emsg = checkEmptyField();
+
+        if (emsg !== "") {
+
+            setSubmitErr(emsg);
+            return;
+        } 
+
+        var validNameMsg = validateNameValue();
+                
+        if (validNameMsg !== "") {
+            setSubmitErr(validNameMsg);
+            return;
+        }
+
+        if ( !email.includes("@") || !email.includes(".") ) {
+            setErrEmail("You must enter a valid email");
+            return;
+        }
+
+
+        //TODO: set password requirement 
+        
+    
+
+    }
+
+
+    
+    return (
+        <div className="main-signup">
+
+            <p className="title">Create account</p>
+            <p className="submit-err">{submitErr}</p>
+            <form method="post" action="#">
+                <p className="error-row">{errFname}</p>
+                <div> 
+                    <input 
+                        style={{borderColor: fnameBorderClr}} 
+                        className="signup-input" 
+                        type="text" 
+                        placeholder="First Name" 
+                        onChange={handleFname}/> 
                 </div>
-
+                <p className="error-row">{errMname}</p>
                 <div>
-                    <label>middle name<i>(optional)</i>:</label>
-                    <input type="text" onChange={e => {this.handleNameEvent(e,"mname","middle ")}}/>
+                    <input 
+                        style={{borderColor: mnameBorderClr}}
+                        className="signup-input" 
+                        type="text" 
+                        placeholder="Middle Name (optional)"
+                        onChange={handleMname}/>
                 </div>
-
+                <p className="error-row">{errLname}</p>
                 <div>
-                    <label>last name:</label>
-                    <input type="text" onChange={e => {this.handleNameEvent(e,"lname","last ")}} />
-
+                    <input
+                        style={{borderColor: lnameBorderClr}}
+                        className="signup-input" 
+                        type="text" 
+                        placeholder="Last Name"
+                        onChange={handleLname}/>
                 </div>
-
+                <p className="error-row">{errUname}</p>
                 <div>
-                    <label>username</label>
-                    <input type="text" onChange={e => {this.handleNameEvent(e,"uname","user")}} />
+                    <input 
+                        style={{borderColor: unameBorderClr}}
+                        className="signup-input" 
+                        type="text" 
+                        placeholder="Username"
+                        onChange={handleUname}/>
                 </div>
-
+                <p className="error-row">{errEmail}</p>
                 <div>
-                    <label>birthday:</label>
-
-                    <select defaultValue="default" onChange={this.handleMonthChange}>
-                        <option value="default" disabled>Month</option>
-                        {generateMonth().map((option,index) => <option key={index} value={option.value}>{option.value}</option>)}
-
-                    </select>
-                    <select defaultValue="default" onChange={this.handleDayChange}>
-                        <option value="default" disabled>Day</option>
-                        {generateDay().map((option,index) => <option key={index} value={option.value}>{option.value}</option>)}
-                            
-                    </select>
-                    <select defaultValue="default" onChange={this.handleYearChange}>
-                        <option value="default" disabled>Year</option>
+                    <input
+                        style={{borderColor: emailBorderClr}}
+                        className="signup-input" 
+                        type="text" 
+                        placeholder="Email"
+                        onChange={handleEmail}/>
+                </div>
+                <p className="error-row">{errPassword}</p>
+                <div>
+                    <input
+                        style={{borderColor: passwordBorderClr}}
+                        className="signup-input" 
+                        type="text" 
+                        placeholder="new password"
+                        onChange={handleNpasswd}
+                    />
+                </div>
+                <p className="error-row">{errRpassword}</p>
+                <div>
+                    <input 
+                        style={{borderColor: rpasswordBorderClr}}
+                        className="signup-input" 
+                        type="text" 
+                        placeholder="retype password"
+                        onChange={handleRpasswd}/>
+                </div>
+                <p className="error-row">{errBirthday}</p>
+                <div className="sel-div">
+                    <select onChange={e => setYear(e.target.value)}>
+                        <option disabled selected hidden>Year</option>
                         {generateYear().map((option,index) => <option key={index} value={option.value}>{option.value}</option>)}
-                            
+
                     </select>
+                    <select onChange={e => setMonth(e.target.value)}>
+                        <option disabled selected hidden>Month</option>
+                        {generateMonth().map((option,index) => <option key={index} value={option.value}>{option.value}</option>)}
+                    </select>
+                    <select onChange={e => setDay(e.target.value)}>
+                        <option disabled selected hidden>Day</option>
+                        {generateDay().map((option,index) => <option key={index} value={option.value}>{option.value}</option>)}
+                    </select>
+
+                </div>
+
+
+                <button type="submit" onClick={submit}>Create</button>
         
 
-                </div>
+            </form>
 
-                <div>
-                    <label>email:</label>
-                    <input type="text" onChange={ e => {this.handleInputChange(e,"email")}} />
+        </div>
+        
 
-                </div>
-                
-                <div>
-                    <label>password:</label>
-                    <input type="text" onChange={ e => {this.handleInputChange(e,"password")}}/>
-
-                </div>
-
-                <div>
-                    <label>confirm password:</label>
-                    <input type="text" onChange={ e => {this.handleInputChange(e,"npassword")}}/>
-                
-
-                </div>
-
-                <button type="button" onClick={this.submit} >Create</button>
-
-            </div>
-
-
-
-        )
-
-
-    }
+    );
 
 
 }
