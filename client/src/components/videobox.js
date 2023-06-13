@@ -4,13 +4,9 @@ import React, {useState} from "react";
 import "../style/videobox.css";
 import nothumb from "../assets/thumbnail.png";
 
-const MAX_LENGTH_TITLE = 23;
+const MAX_LENGTH_TITLE = 25;
 
 function VideoBox({thumbnail,title,channel,upload,vhash,sh_channel}) {
-
-    
-    const [videohash,setVideoHash] = useState(vhash);
-
 
     var ctitle = "";
 
