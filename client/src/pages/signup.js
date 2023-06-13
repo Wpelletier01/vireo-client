@@ -245,7 +245,6 @@ function SignUp() {
         if (errMname !== "") {
             return true;
         }
-        // middle name is optional
 
         if (errLname !== "") {
             return true;
