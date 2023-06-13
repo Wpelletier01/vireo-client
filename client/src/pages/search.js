@@ -9,7 +9,7 @@ function Search() {
     const [searchQuery,setSearchQuery] = useState(window.location.pathname.replace("/search/",""));
 
     const [rows,setRows] = useState([]);
-    const [errStat,setErrStat] = useState(null);
+    const [errCode,setErrCode] = useState(0);
 
 
     const getQueryResp = async () => {
@@ -21,10 +21,11 @@ function Search() {
             
             if (!response.ok) {
 
-                setErrStat([response.status,response.statusText]);
+                setErrCode(response.status);
 
             } else {
                 const data = await response.json();
+                await console.log(data);
                 setRows(data["response"]);
 
             }
@@ -45,47 +46,37 @@ function Search() {
             
         })();
         
-
-
-
-
-
-
     },[]);
 
 
+    if (errCode !== 0) {
+
+        return  <ErrCode code={errCode} />
+    }
 
     return (
 
+   
+
         <div>
-            { (errStat == null) &&
+            <TopBar/>
+            { (searchQuery != null) && <p className="search-result-title">{"Result for: " + searchQuery}</p>}
+            { (rows.length !== 0) &&
+                rows.map(row => (
 
-                <div>
-                    <TopBar/>
-                    { (searchQuery != null) && <p>{"Result for: " + searchQuery}</p>}
-                    { (rows.length !== 0) &&
-                        rows.map(row => (
-
-                            <SearchRow 
-                                type={row["type"]}
-                                title={row["title"]}
-                                channel={row["channel"]}
-                                isrc={row["thumbnail"]} 
-                            />
-
-                        ))
+            <SearchRow 
+                type={row["type"]}
+                title={row["title"]}
+                channel={row["channel"]}
+                isrc={row["thumbnail"]} 
+            />))
             
-                    }
-                    { (rows.length === 0) && <p>no row</p> }
+            }
+            { (rows.length === 0) && <p className="nofound">No Result</p> }
             
-                </div>
-                
-            } 
-            { (errStat != null ) && <ErrCode code={errStat[0]} reason={errStat[1]} />}
-
-
         </div>
-
+                
+          
 
     );
 

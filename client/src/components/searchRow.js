@@ -36,7 +36,7 @@ function SearchRow({type,title,channel,isrc}) {
             {(type === "channel" && 
                 <div className="row">
                     
-                        {(isrc != null) && <img className="channel-thumbnail" src={`http://localhost:3000/thumbnail/${isrc}`} alt="thumbnail or channel"/>}
+                        {(isrc != null) && <img className="channel-thumbnail" src={`http://localhost:3000/channel/picture/${channel}`} alt="thumbnail or channel"/>}
                         {(isrc == null) && <img className="channel-thumbnail" src={dChannelImg} alt="thumbnail or channel"/>}
                     
                     <div className="search-cinfo">

@@ -30,16 +30,24 @@
     max-width: 100%;
     display: block;
     text-decoration: none;
-   
+    color: var(--w);   
 
 }
+
+
+
 .vbox .title {
     
-    padding: 4% 5% 1% 10%;
+    padding: 2% 5% 1% 10%;
 
     min-height: 0;
     text-decoration: none;
     color: var(--WHITE);
+}
+
+.vbox .title :hover {
+
+    color: var(--PURPLE);    
 }
 
 .vbox .channel {
@@ -54,11 +62,16 @@
 
 }
 
+.vbox .channel:hover {
+
+    color: var(--PURPLE);
+
+}
 
 
 .vbox .thumbnail {
 
-    width: 90%;
+    width: 100%;
     height: 75%;
     
     min-height: 0;
@@ -66,8 +79,7 @@
 }
 
 .vbox .thumbnail img {
-    padding: 5px 5% 2px 10%;
-    width: 90%;
+    width: 100%;
     height: 100%;
     min-height: 0;
 

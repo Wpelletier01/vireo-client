@@ -5,6 +5,7 @@ import TopBar from "../components/topbar";
 import VideoBox from "../components/videobox";
 import ErrCode from "./error";
 
+import "../style/channel.css";
 import "../style/videobox.css";
 import "../style/videos-list.css";
 
@@ -13,7 +14,7 @@ function Channel() {
 
     const username = window.location.pathname.replace("/channel/","");
     
-    const  [errStats,setErrStat] = useState(null)
+    const  [errCode,setErrCode] = useState(0)
     const  [videos,setVideos] = useState([]);
    
     const init = async () => {
@@ -25,7 +26,7 @@ function Channel() {
             
             if (!request.ok) {
 
-                setErrStat([request.status, request.statusText]);
+                setErrCode(request.status);
 
                 console.log(
                     "adsdasda"
@@ -62,31 +63,41 @@ function Channel() {
     },[]);
 
 
+    if (ErrCode !== 0)
+
+
     return (
 
-        <div>
+       
 
-            { (errStats != null) && <ErrCode code={errStats[0]} reason={errStats[1]}/>}
-            { (errStats == null) &&
-                <div>
-                    <TopBar/>
-                    { (username != null) && <p className="channel-name">{username}</p>}
-                    {(localStorage.getItem("user") === username) && <a href="/upload">Upload</a> }
-                    <div className="videos-list">
+            
+        <div>
+            <TopBar/>
+                <div className="channel-info">
+                    <img src={`http://localhost:3000/channel/picture/${username}`} alt="channel"/>
+                    <div>
+                        { (username != null) && <p className="channel-name">{username}</p>}
+                        {(localStorage.getItem("user") === username) && <a href="/upload">Upload</a> }
+                    </div>
+                        
+                </div>
+    
+
+                <div className="videos-list">
                     { videos.map(video => (
                         <VideoBox 
                             thumbnail={video["img"]} 
                             title={video["title"]} 
                             channel={video["channel"]}
-                            vhash={video["hpath"]}
+                            vhash={video["thumbnail"]}
                             upload={video["date"]}
                             sh_channel={false}
                         />))
                     }
     
-                    </div>
                 </div>
-            }
+            
+            
         </div>
         
  

@@ -1,0 +1,12 @@
+
+.channel-info {
+    padding: 3% 20px 10px 3%;
+    display: flex;
+}
+
+.channel-info img {
+    
+    width: 15%;
+    border-radius: 50%;
+
+}
