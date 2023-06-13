@@ -32,7 +32,7 @@ function SignIn() {
                 "password": password
             };
 
-            const response = await fetch("/signin",{
+            const response = await fetch("/sign_in",{
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"

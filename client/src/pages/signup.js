@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+import ErrorPage from "./error";
+
 
 
 import "../style/signup.css";
@@ -92,6 +95,9 @@ function handleInputChange(nvalue,color) {
 
 function SignUp() {
 
+    const navigate = useNavigate();
+
+    const [errorCode,setErrorCode] = useState(0);
 
     const [fname,setFname] = useState("");
     const [errFname,setErrFname] = useState("");
@@ -125,9 +131,9 @@ function SignUp() {
     const [errRpassword,setErrRpassword] = useState("");
     const [rpasswordBorderClr,setRpasswdBorderClr] = useState(NORMAL_BORDER_COLOR);
 
-    const [month,setMonth] = useState("");
-    const [year,setYear] = useState("");
-    const [day,setDay] = useState("");
+    const [month,setMonth] = useState(0);
+    const [year,setYear] = useState(0);
+    const [day,setDay] = useState(0);
 
     const [submitErr, setSubmitErr] = useState("");
 
@@ -230,7 +236,7 @@ function SignUp() {
             }
 
 
-        },500);
+        },800);
 
 
     }
@@ -300,6 +306,11 @@ function SignUp() {
         if (rpassword === "") {
             msg = `${msg}You need to reenter your password\n`;
         }
+        
+        if (month === 0 || day === 0 || year === 0) {
+
+            msg = `${msg}You need to enter your birthday\n`;
+        }
 
         return msg
 
@@ -342,7 +353,7 @@ function SignUp() {
     }
 
 
-    const submit = (event) => {
+    const submit = async (event) => {
 
         event.preventDefault();
 
@@ -376,10 +387,52 @@ function SignUp() {
 
         //TODO: set password requirement 
         
-    
+        var body = {
+
+            "fname":    fname,
+            "mname":    mname,
+            "lname":    lname,
+            "username": uname,
+            "month":    month,
+            "day":      day,
+            "year":     year,
+            "email":    email,
+            "password": password
+            
+        };
+
+        const response = await fetch("/sign_up",{
+
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+
+            },
+            body:   JSON.stringify(body)
+
+        });
+
+        if (!response.ok) {
+
+            setErrorCode(response.status);
+            console.log(await response.text);
+
+        } else {
+
+            console.log("created");
+            navigate("/home");
+            
+        }
+
+
+ 
 
     }
 
+    if (errorCode !== 0) {
+
+        return <ErrorPage code={errorCode}/>;
+    }
 
     
     return (
