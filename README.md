@@ -3,6 +3,9 @@
 ## Description 
 A simple graphic user interface website for the Vireo in JavaScript. It uses the Reactjs framework 
 
+![alt text](png/Selection_001.png)
+![alt text](png/Selection_002.png)
+
 
 ## TODO
 
